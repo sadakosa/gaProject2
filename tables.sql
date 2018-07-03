@@ -1,0 +1,3 @@
+INSERT IF NOT EXISTS random (
+    id SERIAL PRIMARY KEY
+);

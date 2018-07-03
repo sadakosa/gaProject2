@@ -42,7 +42,7 @@ const configs = {
     user: 'sabrinachow',
     host: '127.0.0.1',
     database: 'wireFrame',
-    port: 8080
+    port: 5432
 }
 
 const pool = new pg.Pool(configs);
@@ -80,10 +80,9 @@ app.engine('jsx', reactEngine);
 // this line sets react to be the default view engine
 app.set('view engine', 'jsx');
 
-const bodyParser = require('body-parser');
 //tell your app to use the module
-app.use(bodyParser.json);
-app.use(bodyParser.urlencoded({
+app.use(express.json());
+app.use(express.urlencoded({
     extended: true
 }));
 
@@ -104,7 +103,8 @@ app.use(bodyParser.urlencoded({
 
 
 app.get('/', (request, response) => {
-    response.send('yay');
+    console.log('goes through');
+    response.render('hello');
 });
 
 
@@ -113,6 +113,10 @@ app.get('/', (request, response) => {
  * Listen to requests on port 3000
  * ===================================
  */
-app.listen(8080, () => console.log('~~~ Tuning in to the waves of port 8080 ~~~'));
+const server = app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
 
-
+// Run clean up actions when server shuts down
+server.on('close', () => {
+  console.log('Closed express server');
+  // close database connection pool
+});
