@@ -74,7 +74,7 @@ app.use(methodOverride('_method'));
 app.use(cookieParser());
 
 // look in the views directory for all the templates
-app.set('views', __dirname + 'views');
+app.set('views', __dirname + '/views');
 // use the react engine in express
 app.engine('jsx', reactEngine);
 // this line sets react to be the default view engine
