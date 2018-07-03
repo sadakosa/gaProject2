@@ -25,6 +25,8 @@ const methodOverride = require('method-override');
 
 const pg = require('pg');
 
+const sha256 = require('js-sha256');
+
 /*
     *************************************************************
     *************************************************************
@@ -103,10 +105,38 @@ app.use(express.urlencoded({
 
 
 app.get('/', (request, response) => {
-    console.log('goes through');
     response.render('hello');
 });
 
+app.get('/signin', (request, response) => {
+    console.log('goes through');
+    // response.render('hello');
+    response.send('signin');
+});
+
+app.get('/signup', (request, response) => {
+    console.log('goes through');
+    response.render('signupForm');
+    // response.send('signup');
+});
+
+app.post('/signup', (request, response) => {
+    let passwordHash = sha256(request.body.password);
+
+    console.log(request.body);
+    const queryString = 'INSERT INTO users (username, first_name, last_name, email, password_hash) VALUES ($1, $2, $3, $4, $5)';
+    const values = [request.body.username, request.body.first_name, request.body.last_name, request.body.email, passwordHash];
+
+    pool.query(queryString, values, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('result');
+            console.log(result.rows);
+            response.send('argh');
+        }
+    });
+});
 
 /**
  * ===================================

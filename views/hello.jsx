@@ -1,12 +1,13 @@
 var React = require('react');
-var layoutContainer = require('./layout.jsx')
+var LayoutContainer = require('./layout.jsx')
+//layout must be caps! to differentiate from html
 
 class hello extends React.Component {
     render() {
         return (
-            <layoutContainer>
+            <LayoutContainer>
                 <div>hello</div>
-            </layoutContainer>
+            </LayoutContainer>
         );
     }
 }
