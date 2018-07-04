@@ -15,8 +15,6 @@ console.log('starting the server... :)');
 
 const db = require('./db.js');
 
-const SALT = 'yay';
-
 const cookieParser = require('cookie-parser');
 
 const reactEngine = require('express-react-views').createEngine();
@@ -106,10 +104,6 @@ app.use(express.urlencoded({
 */
 
 require('./routes')(app, db);
-
-// app.get('/', (request, response) => {
-//     response.render('hello');
-// });
 
 
 //login
