@@ -10,17 +10,6 @@ module.exports = function (db) {
         response.render('loginForm');
     }
 
-    const loginEmailCheck = (request, response) => {
-        db.user.userLoginEmailCheck((err, queryResult) => {
-            if (err) {
-                response.send('db error: ' + err.message);
-            } else {
-                console.log(queryResult.rows);
-                response.send(queryResult);
-            }
-        });
-    }
-
     const loginCheck = (request, response) => {
         let passwordHash = sha256(request.body.password);
 
@@ -28,7 +17,9 @@ module.exports = function (db) {
             if (err) {
                 response.send('db error: '+ err.message);
             } else { 
-                if (queryResult.rows[0].password_hash == passwordHash) {
+                if (queryResult.rows.length === 0) {
+                    response.render('loginForm', {message: 'your email/ password is wrong'});
+                } else if (queryResult.rows[0].password_hash == passwordHash) {
                     let user_id = queryResult.rows[0].id;
                     let currentSessionCookie = sha256(user_id + 'logged_id' + SALT);
 
@@ -38,7 +29,7 @@ module.exports = function (db) {
 
                     response.send('logged user in with id: ' + user_id);
                 } else {
-                    response.send('ur password is wrong');
+                    response.render('loginForm', {message: 'your email/ password is wrong'});
                 }
             }
         });
@@ -50,27 +41,20 @@ module.exports = function (db) {
 
     const createUser = (request, response) => {
         let password_hash = sha256(request.body.password);
-        
-        db.user.userCreate(request.body.username, request.body.email, password_hash, (err, queryResult) => {
-            if(err) {
-                response.send('db error: ' + err.message);
+
+        db.user.userCreate(request.body.username, request.body.email, password_hash, (boolIsFine, msg) => {
+            if(boolIsFine) {
+                response.render('loginForm', {message: 'sign up successful!'});
             } else {
-                let user_id = queryResult.rows[0].id;
-                let currentSessionCookie = sha256(user_id + 'logged_id' + SALT);
-
-                response.cookie('session', currentSessionCookie);
-                response.cookie('loggedin', 'true');
-                response.cookie('user_id', user_id);
-
-                response.send('created user with id: ' + user_id);
+                response.render('signupForm', {message: msg})
             }
         });
+       
     }
 
     return {
         get: get,
         login: login,
-        loginEmailCheck: loginEmailCheck,
         loginCheck: loginCheck,
         signup: signup,
         createUser: createUser

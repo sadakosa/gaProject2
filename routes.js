@@ -5,8 +5,7 @@ module.exports = (app, db) => {
     
     //login
     app.get('/login', users.login);
-    app.get('/loginEmailCheck', users.loginEmailCheck);
-    app.post('/login', users.loginCheck);
+    app.post('/loginCheck', users.loginCheck);
     
     //signup
     app.get('/signup', users.signup);
