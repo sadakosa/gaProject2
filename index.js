@@ -13,6 +13,8 @@ console.log('starting the server... :)');
     *************************************************************
 */
 
+const db = require('./db.js');
+
 const SALT = 'yay';
 
 const cookieParser = require('cookie-parser');
@@ -23,7 +25,7 @@ const jsonfile = require('jsonfile');
 
 const methodOverride = require('method-override');
 
-const pg = require('pg');
+// const pg = require('pg');
 
 const sha256 = require('js-sha256');
 
@@ -40,18 +42,18 @@ const sha256 = require('js-sha256');
     *************************************************************
 */
 
-const configs = {
-    user: 'sabrinachow',
-    host: '127.0.0.1',
-    database: 'wireFrame',
-    port: 5432
-}
+// const configs = {
+//     user: 'sabrinachow',
+//     host: '127.0.0.1',
+//     database: 'wireFrame',
+//     port: 5432
+// }
 
-const pool = new pg.Pool(configs);
+// const pool = new pg.Pool(configs);
 
-pool.on('error', function(err) {
-    console.log('idle client error', err.message, err.stack);
-});
+// pool.on('error', function(err) {
+//     console.log('idle client error', err.message, err.stack);
+// });
 
 
 /*
@@ -103,33 +105,57 @@ app.use(express.urlencoded({
     *************************************************************
 */
 
+require('./routes')(app, db);
 
-app.get('/', (request, response) => {
-    response.render('hello');
+// app.get('/', (request, response) => {
+//     response.render('hello');
+// });
+
+
+//login
+app.get('/login', (request, response) => {
+    response.render('loginForm');
+    // response.send('signin');
 });
 
-app.get('/signin', (request, response) => {
-    console.log('goes through');
-    // response.render('hello');
-    response.send('signin');
+app.post('/login', (request, response) => {
+    let passwordHash = sha256(request.body.password);
+
+    const queryString = 'SELECT id, password_hash FROM users WHERE username = $1';
+    const values = [request.body.username];
+
+    db.pool.query(queryString, values, (err, result)  => {
+        if (err) {
+            response.send('db error: '+ err.message);
+        } else { 
+            console.log(result.rows);
+            if (result.rows[0].password_hash == passwordHash) {
+                console.log('logged in!');
+                response.cookie('login', 'true');
+                response.cookie('user', result.rows[0].id);
+                response.redirect('/userHome');
+            } else {
+                response.send('ur password is wrong');
+            }
+        }
+    });
 });
 
+
+//sign up
 app.get('/signup', (request, response) => {
-    console.log('goes through');
     response.render('signupForm');
-    // response.send('signup');
 });
 
 app.post('/signup', (request, response) => {
     let passwordHash = sha256(request.body.password);
 
-    console.log(request.body);
     const queryString = 'INSERT INTO users (username, first_name, last_name, email, password_hash) VALUES ($1, $2, $3, $4, $5)';
     const values = [request.body.username, request.body.first_name, request.body.last_name, request.body.email, passwordHash];
 
-    pool.query(queryString, values, (err, result) => {
+    db.pool.query(queryString, values, (err, result) => {
         if (err) {
-            console.log(err);
+            response.send('db error: '+ err.message);
         } else {
             console.log('result');
             console.log(result.rows);
