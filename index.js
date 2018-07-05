@@ -106,58 +106,6 @@ app.use(express.urlencoded({
 require('./routes')(app, db);
 
 
-//login
-app.get('/login', (request, response) => {
-    response.render('loginForm');
-    // response.send('signin');
-});
-
-app.post('/login', (request, response) => {
-    let passwordHash = sha256(request.body.password);
-
-    const queryString = 'SELECT id, password_hash FROM users WHERE username = $1';
-    const values = [request.body.username];
-
-    db.pool.query(queryString, values, (err, result)  => {
-        if (err) {
-            response.send('db error: '+ err.message);
-        } else { 
-            console.log(result.rows);
-            if (result.rows[0].password_hash == passwordHash) {
-                console.log('logged in!');
-                response.cookie('login', 'true');
-                response.cookie('user', result.rows[0].id);
-                response.redirect('/userHome');
-            } else {
-                response.send('ur password is wrong');
-            }
-        }
-    });
-});
-
-
-//sign up
-app.get('/signup', (request, response) => {
-    response.render('signupForm');
-});
-
-app.post('/signup', (request, response) => {
-    let passwordHash = sha256(request.body.password);
-
-    const queryString = 'INSERT INTO users (username, first_name, last_name, email, password_hash) VALUES ($1, $2, $3, $4, $5)';
-    const values = [request.body.username, request.body.first_name, request.body.last_name, request.body.email, passwordHash];
-
-    db.pool.query(queryString, values, (err, result) => {
-        if (err) {
-            response.send('db error: '+ err.message);
-        } else {
-            console.log('result');
-            console.log(result.rows);
-            response.send('argh');
-        }
-    });
-});
-
 /**
  * ===================================
  * Listen to requests on port 3000

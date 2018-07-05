@@ -13,7 +13,7 @@ module.exports = function (db) {
     const loginCheck = (request, response) => {
         let passwordHash = sha256(request.body.password);
 
-        db.user.userLogin(request.body.email, passwordHash, (err, queryResult)  => {
+        db.user.getUsersFromEmail(request.body.email, passwordHash, (err, queryResult)  => {
             if (err) {
                 response.send('db error: '+ err.message);
             } else { 
@@ -26,8 +26,11 @@ module.exports = function (db) {
                     response.cookie('session', currentSessionCookie);
                     response.cookie('loggedin', 'true');
                     response.cookie('user_id', user_id);
+                    response.cookie('username', queryResult.rows[0].username);
+                    let context = {username: queryResult.rows[0].username};
 
-                    response.send('logged user in with id: ' + user_id);
+                    // response.send('logged user in with id: ' + user_id);
+                    response.redirect('/dashboard');
                 } else {
                     response.render('loginForm', {message: 'your email/ password is wrong'});
                 }
@@ -49,7 +52,14 @@ module.exports = function (db) {
                 response.render('signupForm', {message: msg})
             }
         });
-       
+    }
+
+    const userDashboard = (request, response) => {
+        let user_id = request.cookies.user_id;
+
+        db.user.getUsersFromId(user_id, (err, queryResult) => {
+            response.render('dashboard', {username: queryResult.rows[0].username});
+        })
     }
 
     return {
@@ -57,6 +67,7 @@ module.exports = function (db) {
         login: login,
         loginCheck: loginCheck,
         signup: signup,
-        createUser: createUser
+        createUser: createUser,
+        userDashboard: userDashboard
     }
 }

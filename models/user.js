@@ -22,8 +22,8 @@ module.exports = function (db) {
                     queryText = 'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING *';
                     values = [username, email, password_hash];
                     db.query(queryText, values, (err2, result2) => {
-                        if (err) {
-                            response.send('db error 2: ' + err.message);
+                        if (err2) {
+                            response.send('db error 2: ' + err2.message);
                         } else {
                             // everything is fine
                             callback(true);
@@ -36,15 +36,23 @@ module.exports = function (db) {
     }
 
     //logging users in
-    let userLogin = function (email, password_hash, callback) {
-        let queryText = 'SELECT id, password_hash FROM users WHERE email = $1';
+    let getUsersFromEmail = function (email, password_hash, callback) {
+        let queryText = 'SELECT * FROM users WHERE email = $1';
         const values = [email];
+
+        db.query(queryText, values, callback);
+    }
+
+    let getUsersFromId = function (id, callback) {
+        let queryText = 'SELECT * FROM users WHERE id = $1';
+        const values = [id];
 
         db.query(queryText, values, callback);
     }
 
     return {
         userCreate: userCreate,
-        userLogin: userLogin,
+        getUsersFromEmail: getUsersFromEmail,
+        getUsersFromId: getUsersFromId
     }
 }

@@ -14,9 +14,13 @@ poolObj.on('error', function(err) {
 });
 
 const userModel = require('./models/user');
+const appleModel = require('./models/app');
 const userObj = userModel(poolObj);
+const appleObj = appleModel(poolObj);
+
 
 module.exports = {
     user: userObj,
-    pool: poolObj
+    pool: poolObj,
+    apple: appleObj
 }
