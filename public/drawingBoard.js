@@ -79,19 +79,12 @@ function drawRectangle () {
 
 
 
-
-
-
-
-
-
-
 /*
     *************************************************************
     *************************************************************
     *************************************************************
 
-                    Create Rectangles
+                    Create Circles
 
     *************************************************************
     *************************************************************
@@ -116,18 +109,6 @@ function drawCircle () {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 /*
     *************************************************************
     *************************************************************
@@ -139,20 +120,24 @@ function drawCircle () {
     *************************************************************
     *************************************************************
 */
-
-function writeText () {
-    console.log('text');
-    ctx.font = "20px Arial";
-    ctx.fillText("Hello World", 10, 50);
-    // ctx.strokeText("Hello World", 10, 50);
+function drawThingsText (lineButEvt) {
+    originalPos = getMousePos(c, lineButEvt);
 
     let text = {};
     text.type = 'text';
-    text.specs = ['Hello World', 10, 50];
+    text.specs = ['Hello World', originalPos.x, originalPos.y];
     text.draw = 'fill';
     text.font = '20px Arial';
 
     objArr.push(text);
+
+    ctx.clearRect(0, 0, c.width, c.height);
+    redrawShapes();
+    c.removeEventListener('click', drawThingsText, false);
+}
+
+function writeText () {
+    c.addEventListener('click', drawThingsText, false);
 }
 
 
@@ -169,63 +154,47 @@ function writeText () {
     *************************************************************
     *************************************************************
 */
-var count;  
-var originalPos;
-function drawWhenMove (rectButEvt) {
+function drawWhenMoveLine (lineButEvt) {
     ctx.clearRect(0, 0, c.width, c.height);
-    let mousePos = getMousePos(c, rectButEvt);
+    let mousePos = getMousePos(c, lineButEvt);
     
     if (count === 0) {
-        let rect = {};
-        rect.type =  'rect';
-        rect.specs = [originalPos.x, originalPos.y, mousePos.y-originalPos.y, mousePos.x-originalPos.x];
-        rect.draw = 'stroke';
-        rect.stokeStyle = 'red';
+        let line = {};
+        line.type = 'line';
+        line.start = [originalPos.x, originalPos.y];
+        line.end = [mousePos.x, mousePos.y];
 
-        objArr.push(rect);
+        objArr.push(line);
     } else {
-        objArr[objArr.length-1].specs = [originalPos.x, originalPos.y, mousePos.y-originalPos.y, mousePos.x-originalPos.x]
+        objArr[objArr.length-1].end = [mousePos.x, mousePos.y];
     }
     
     redrawShapes();
     count ++;
 }
 
-function drag2drawThingsLine (rectButEvt) {
+function drag2drawThingsLine (lineButEvt) {
     // window.requestAnimationFrame(drag2drawThings(thing, evt));
     console.log('mousedown');
-    c.addEventListener('mouseup', newThing, false);
+    c.addEventListener('mouseup', newThingLine, false);
 
-    originalPos = getMousePos(c, rectButEvt);
+    originalPos = getMousePos(c, lineButEvt);
     count = 0;
-    c.addEventListener('mousemove', drawWhenMove, false);
+    c.addEventListener('mousemove', drawWhenMoveLine, false);
 }
 
-function newThing () {
-    c.removeEventListener('mousedown', drag2drawThings, false);
+function newThingLine () {
+    c.removeEventListener('mousedown', drag2drawThingsLine, false);
     ctx.clearRect(0, 0, c.width, c.height);
     redrawShapes();
-    c.removeEventListener('mousemove', drawWhenMove, false);
-    c.removeEventListener('mouseup', newThing, false);
+    c.removeEventListener('mousemove', drawWhenMoveLine, false);
+    c.removeEventListener('mouseup', newThingLine, false);
     count = 0;
 } 
 
-
-
-
 function drawLine () {
-    c.addEventListener('mousedown', drag2drawThings)
-    console.log('line');
-    ctx.moveTo(0, 0);
-    ctx.lineTo(200, 100);
-    ctx.stroke();
-
-    let line = {};
-    line.type = 'line';
-    line.start = [0, 0];
-    line.end = [200, 100];
-
-    objArr.push(line);
+    console.log('line')
+    c.addEventListener('mousedown', drag2drawThingsLine, false);
 }
 
 
@@ -285,21 +254,6 @@ function save () {
     *************************************************************
     *************************************************************
 */
-function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
 
 function checkAndDraw (obj) {
     let fromLeft;
@@ -396,6 +350,20 @@ function redrawShapes () {
 
 
 
+/*
+    *************************************************************
+    *************************************************************
+    *************************************************************
+
+                    SideBar Setup
+
+    *************************************************************
+    *************************************************************
+    *************************************************************
+*/
+function sideBarSetup () {
+
+}
 
 
 

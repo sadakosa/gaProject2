@@ -14,9 +14,21 @@ class drawingBoard extends React.Component {
                     <button className='btn btn-light' id='img' style={{margin: '5px', width: '150px'}}>Img</button>
                     <button className='btn btn-light' id='save' style={{margin: '5px', width: '150px'}}>Save</button>
                 </div>
-                <div>
-                    <canvas id="myCanvas" width="600" height="500" style={{border:'1px solid #000000', position: 'relative', margin: '0 auto'}}></canvas>
+
+                <div className='row'>
+                    <div id='objList'>
+
+                    </div>
+
+                    <div>
+                        <canvas id="myCanvas" width="600" height="500" style={{border:'1px solid #000000', position: 'relative', margin: '0 auto'}}></canvas>
+                    </div>
+
+                    <div id='properties'>
+
+                    </div>
                 </div>
+                
                 <script src='/drawingBoard.js'></script>
             </LayoutContainer>
         );
