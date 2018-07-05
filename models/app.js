@@ -1,8 +1,8 @@
 module.exports = function (db) {
-    let uploadDrawing = function (json, callback) {
+    let uploadDrawing = function (json, id, callback) {
         console.log('json', json)
         let queryText= 'UPDATE projects SET details = $1 WHERE id = $2';
-        const values = [json, 1];
+        const values = [json, id];
 
         db.query(queryText, values, callback);
     }

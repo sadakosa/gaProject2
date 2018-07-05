@@ -21,7 +21,7 @@ module.exports = function (db) {
     const uploadDrawing = (request, response) => {
         console.log(request.body);
         let json = request.body;
-        db.apple.uploadDrawing(json, (err, result) => {
+        db.apple.uploadDrawing(json, request.cookies.drawingBoard, (err, result) => {
             if(err) {
                 response.send('db error: ' +  err.message);
             } else {
