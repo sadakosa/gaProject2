@@ -42,7 +42,7 @@ function drawWhenMoveRect (rectButEvt) {
         rect.type =  'rect';
         rect.specs = [originalPos.x, originalPos.y, mousePos.y-originalPos.y, mousePos.x-originalPos.x];
         rect.draw = 'stroke';
-        rect.stokeStyle = 'black';
+        rect.strokeStyle = 'black';
 
         objArr.push(rect);
     } else {
@@ -101,9 +101,10 @@ function drawCircle () {
     circle.type = 'circle';
     circle.specs = [100, 100, 100, 0, 3];
     circle.draw = 'stroke';
-    circle.stokeStyle = 'black';
+    circle.strokeStyle = 'black';
 
     objArr.push(circle);
+    sideBarSetup();
 }
 
 
@@ -130,7 +131,7 @@ function drawThingsText (lineButEvt) {
     text.specs = ['Hello World', originalPos.x, originalPos.y];
     text.draw = 'fill';
     text.font = '20px Arial';
-    text.stokeStyle = 'black';
+    text.strokeStyle = 'black';
 
     objArr.push(text);
 
@@ -319,6 +320,7 @@ function checkAndDraw (obj) {
     if (draw == 'stroke' && obj.type !== 'text') {
         let strokeStyle = obj.strokeStyle;
         ctx.strokeStyle = strokeStyle;
+        console.log(obj.type, obj.strokeStyle)
         ctx.stroke();
     } else if (obj.type !== 'text' && obj.type !== 'line'){
         let fillStyle = obj.fillStyle;
@@ -334,9 +336,10 @@ function getObjFromDb () {
         console.log("response text", this.responseText);
         console.log("status text", this.statusText);
         console.log("status code", this.status);
+        
+        const response = JSON.parse(this.responseText)[0];
+        if (response.details) {objArr = response.details.drawings;}
 
-        objArr = JSON.parse(this.responseText)[0].details.drawings;
-        // console.log(this.responseText[0]);
         redrawShapes();
         sideBarSetup();
     }
@@ -371,13 +374,21 @@ function redrawShapes () {
     *************************************************************
 */
 function sideBarSetup () {
+    let itemsToRemove = document.getElementsByClassName('items');
+    console.log(itemsToRemove);
+    let num = itemsToRemove.length;
+    for(let i=num-1; i >= 0; i--) {
+        console.log(i)
+        itemsToRemove[i].parentNode.removeChild(itemsToRemove[i]);
+    }
+
     for(let i = objArr.length -1; i >= 0; i--) {
         let item = document.createElement('div');
         item.id = i;
         item.classList.add('items');
         item.innerText = objArr[i].type;
-        item.addEventListener('mouseover', makeRed, false);
-        item.addEventListener('mouseout', makeBlack, false);
+        // item.addEventListener('mouseover', makeRed, false);
+        // item.addEventListener('mouseout', makeBlack, false);
         item.addEventListener('click', propertiesSetup, false);
         document.getElementById('objList').appendChild(item);        
     }
@@ -388,6 +399,8 @@ function propertiesSetup (event) {
     console.log('yay');
     let id = event.target.id;
     let object = objArr[id];
+    console.log(id);
+    console.log(objArr[id]);
 
     if (object.draw == 'stroke') {
         object.strokeStyle = 'red';
