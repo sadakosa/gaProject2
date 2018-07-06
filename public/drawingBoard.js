@@ -42,7 +42,7 @@ function drawWhenMoveRect (rectButEvt) {
         rect.type =  'rect';
         rect.specs = [originalPos.x, originalPos.y, mousePos.y-originalPos.y, mousePos.x-originalPos.x];
         rect.draw = 'stroke';
-        rect.stokeStyle = 'red';
+        rect.stokeStyle = 'black';
 
         objArr.push(rect);
     } else {
@@ -67,6 +67,7 @@ function newThingRect() {
     c.removeEventListener('mousedown', drag2drawThingsRect, false);
     ctx.clearRect(0, 0, c.width, c.height);
     redrawShapes();
+    sideBarSetup();
     c.removeEventListener('mousemove', drawWhenMoveRect, false);
     c.removeEventListener('mouseup', newThingRect, false);
     count = 0;
@@ -100,6 +101,7 @@ function drawCircle () {
     circle.type = 'circle';
     circle.specs = [100, 100, 100, 0, 3];
     circle.draw = 'stroke';
+    circle.stokeStyle = 'black';
 
     objArr.push(circle);
 }
@@ -128,11 +130,13 @@ function drawThingsText (lineButEvt) {
     text.specs = ['Hello World', originalPos.x, originalPos.y];
     text.draw = 'fill';
     text.font = '20px Arial';
+    text.stokeStyle = 'black';
 
     objArr.push(text);
 
     ctx.clearRect(0, 0, c.width, c.height);
     redrawShapes();
+    sideBarSetup();
     c.removeEventListener('click', drawThingsText, false);
 }
 
@@ -163,6 +167,7 @@ function drawWhenMoveLine (lineButEvt) {
         line.type = 'line';
         line.start = [originalPos.x, originalPos.y];
         line.end = [mousePos.x, mousePos.y];
+        line.strokeStyle = 'black';
 
         objArr.push(line);
     } else {
@@ -187,6 +192,7 @@ function newThingLine () {
     c.removeEventListener('mousedown', drag2drawThingsLine, false);
     ctx.clearRect(0, 0, c.width, c.height);
     redrawShapes();
+    sideBarSetup();
     c.removeEventListener('mousemove', drawWhenMoveLine, false);
     c.removeEventListener('mouseup', newThingLine, false);
     count = 0;
@@ -311,10 +317,12 @@ function checkAndDraw (obj) {
     }
 
     if (draw == 'stroke' && obj.type !== 'text') {
-        //let strokeStyle = obj.strokeStyle;
-        //ctx.strokeStyle(strokeStyle);
+        let strokeStyle = obj.strokeStyle;
+        ctx.strokeStyle = strokeStyle;
         ctx.stroke();
     } else if (obj.type !== 'text' && obj.type !== 'line'){
+        let fillStyle = obj.fillStyle;
+        ctx.fillStyle = fillStyle;
         ctx.fill();
     }
 }
@@ -330,6 +338,7 @@ function getObjFromDb () {
         objArr = JSON.parse(this.responseText)[0].details.drawings;
         // console.log(this.responseText[0]);
         redrawShapes();
+        sideBarSetup();
     }
     
     // make a new request
@@ -362,7 +371,57 @@ function redrawShapes () {
     *************************************************************
 */
 function sideBarSetup () {
+    for(let i = objArr.length -1; i >= 0; i--) {
+        let item = document.createElement('div');
+        item.id = i;
+        item.classList.add('items');
+        item.innerText = objArr[i].type;
+        item.addEventListener('mouseover', makeRed, false);
+        item.addEventListener('mouseout', makeBlack, false);
+        item.addEventListener('click', propertiesSetup, false);
+        document.getElementById('objList').appendChild(item);        
+    }
+}
 
+
+function propertiesSetup (event) {
+    console.log('yay');
+    let id = event.target.id;
+    let object = objArr[id];
+
+    if (object.draw == 'stroke') {
+        object.strokeStyle = 'red';
+    } else {
+        object.fillStyle = 'red';
+    }
+
+    redrawShapes();
+}
+
+function makeRed (event) {
+    let id = event.target.id;
+    let object = objArr[id];
+
+    if (object.draw == 'stroke') {
+        object.strokeStyle = 'red';
+    } else {
+        object.fillStyle = 'red';
+    }
+
+    redrawShapes();
+}
+
+function makeBlack (event) {
+    let id = event.target.id;
+    let object = objArr[id];
+
+    if (object.draw == 'stroke') {
+        object.strokeStyle = 'black';
+    } else {
+        object.fillStyle = 'black';
+    }
+
+    redrawShapes();
 }
 
 
