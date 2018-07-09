@@ -33,7 +33,8 @@ class drawingBoard extends React.Component {
                     </div>
                 </div>
                 
-                <script src='/drawingBoard.js'></script>
+                <script src='/drawingBoardProperties.js'></script>
+                <script src='/drawingBoardMain.js'></script>
             </LayoutContainer>
         );
     }

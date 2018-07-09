@@ -65,12 +65,10 @@ function onMouseUp () {
 }
 
 c.addEventListener('mouseenter', function () {
-    // debugger;
     c.addEventListener('mousemove', onMouseMove, false);
 })
 
 c.addEventListener('mouseleave', function () {
-    // debugger;
     mouseX = false;
     mouseY = false;
     mouseDownState = false;
@@ -316,8 +314,6 @@ function checkAndDraw (obj) {
 
     switch (obj.type) {
         case 'line': 
-            console.log("GHELLLR");
-            console.log(obj)
             start = obj.start;
             end = obj.end;
 
@@ -377,8 +373,7 @@ function getObjFromDb () {
         console.log("response text", this.responseText);
         console.log("status text", this.statusText);
         console.log("status code", this.status);
-
-        redrawShapes();
+        objArr = JSON.parse(this.responseText)[0].details.drawings;
         sideBarSetup();
     }
     
@@ -430,31 +425,18 @@ function sideBarSetup () {
     }
 }
 
-
-function propertiesSetup (event) {
-    let id = event.target.id;
-    let object = objArr[id];
-
-    if (object.draw == 'stroke') {
-        object.strokeStyle = 'red';
-    } else {
-        object.fillStyle = 'red';
-    }
-}
-
+var tempStyleHover;
 function makeRed (event) {
     let id = event.target.id;
     let object = objArr[id];
-    console.log('id: ' + id);
-    console.log(object);
 
     if (object.draw == 'stroke') {
-        //debugger;
+        tempStyleHover = object.strokeStyle;
         object.strokeStyle = 'red';
     } else {
+        tempStyleHover = object.fillStyle;
         object.fillStyle = 'red';
     }
-    console.log(objArr);
 }
 
 function makeBlack (event) {
@@ -462,9 +444,9 @@ function makeBlack (event) {
     let object = objArr[id];
 
     if (object.draw == 'stroke') {
-        object.strokeStyle = 'black';
+        object.strokeStyle = tempStyleHover;
     } else {
-        object.fillStyle = 'black';
+        object.fillStyle = tempStyleHover;
     }
 }
 

@@ -1,7 +1,13 @@
 #objects {
     width: 270px;
 }
+
 #objList {
+    height: 440px;
+    overflow-y: scroll;
+}
+
+#proList {
     height: 440px;
     overflow-y: scroll;
 }
