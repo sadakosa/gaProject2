@@ -84,10 +84,9 @@ function everRecurringLoop() {
     //drawing tempShapes
     // if(onMouseDown && mouseX) {}; --> drawing squiggly lines 
     if (mouseDownState && mouseX) {
-        console.log(tempShape);
         switch (tempShape) {
             case 'rect':
-            ctx.beginPath();
+                ctx.beginPath();
                 if (count === 0) {
                     let rect = {};
                     rect.type =  'rect';
@@ -152,6 +151,7 @@ function everRecurringLoop() {
                     line.start = [originalPos.x, originalPos.y];
                     line.end = [mouseX, mouseY];
                     line.strokeStyle = 'black';
+                    line.draw = 'stroke';
                     
                     tempObj.push(line);
                     count++;
@@ -315,38 +315,6 @@ function checkAndDraw (obj) {
     let end;
 
     switch (obj.type) {
-        case 'circle': 
-            fromLeft = obj.specs[0];
-            fromTop = obj.specs[1];
-            size = obj.specs[2];
-            draw = obj.draw;
-
-            ctx.arc(fromLeft, fromTop, size, 0, 2 * Math.PI);
-            break;
-        case 'rect': 
-            fromLeft = obj.specs[0];
-            fromTop = obj.specs[1];
-            length = obj.specs[2];
-            height = obj.specs[3];
-            draw = obj.draw;
-            
-            ctx.rect(fromLeft, fromTop, length, height);
-            break;
-        case 'text': 
-            text = obj.specs[0];
-            fromLeft = obj.specs[1];
-            fromTop = obj.specs[2];
-            font = obj.font;
-            draw = obj.draw;
-
-            ctx.font = obj.font;
-            
-            if (draw == 'stroke') {
-                ctx.strokeText(text, fromLeft, fromTop);
-            } else {
-                ctx.fillText(text, fromLeft, fromTop);
-            }
-            break;
         case 'line': 
             console.log("GHELLLR");
             console.log(obj)
@@ -355,11 +323,43 @@ function checkAndDraw (obj) {
 
             ctx.moveTo(start[0], start[1]);
             ctx.lineTo(end[0], end[1]);
-            ctx.stroke();
             break;
+            
+        case 'circle': 
+            fromLeft = obj.specs[0];
+            fromTop = obj.specs[1];
+            size = obj.specs[2];
+
+            ctx.arc(fromLeft, fromTop, size, 0, 2 * Math.PI);
+            break;
+        case 'rect': 
+            fromLeft = obj.specs[0];
+            fromTop = obj.specs[1];
+            length = obj.specs[2];
+            height = obj.specs[3];
+            
+            ctx.rect(fromLeft, fromTop, length, height);
+            break;
+        case 'text': 
+            text = obj.specs[0];
+            fromLeft = obj.specs[1];
+            fromTop = obj.specs[2];
+            font = obj.font;
+
+            ctx.font = obj.font;
+            
+            if (draw == 'stroke') {
+                ctx.strokeStyle = obj.strokeStyle;
+                ctx.strokeText(text, fromLeft, fromTop);
+            } else {
+                ctx.fillStyle = obj.fillStyle;
+                ctx.fillText(text, fromLeft, fromTop);
+            }
+            break;
+       
     }
 
-    if (draw == 'stroke' && obj.type !== 'text') {
+    if (obj.draw == 'stroke' && obj.type !== 'text') {
         let strokeStyle = obj.strokeStyle;
         ctx.strokeStyle = strokeStyle;
         ctx.stroke();
@@ -423,8 +423,8 @@ function sideBarSetup () {
         item.id = i;
         item.classList.add('items');
         item.innerText = objArr[i].type;
-        item.addEventListener('click', makeRed, false);
-        // item.addEventListener('mouseleave', makeBlack, false);
+        item.addEventListener('mouseenter', makeRed, false);
+        item.addEventListener('mouseleave', makeBlack, false);
         item.addEventListener('click', propertiesSetup, false);
         document.getElementById('objList').appendChild(item);        
     }
@@ -434,17 +434,12 @@ function sideBarSetup () {
 function propertiesSetup (event) {
     let id = event.target.id;
     let object = objArr[id];
-    console.log(id);
-    console.log(objArr[id]);
 
     if (object.draw == 'stroke') {
         object.strokeStyle = 'red';
     } else {
         object.fillStyle = 'red';
     }
-
-    console.log('objArr');
-    // debugger;
 }
 
 function makeRed (event) {
