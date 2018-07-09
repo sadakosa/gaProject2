@@ -1,207 +1,248 @@
-var c = document.getElementById("myCanvas");
-var ctx = c.getContext("2d");
+const c = document.getElementById("myCanvas");
+const ctx = c.getContext("2d");
 var objArr = [];
 
+var mouseDownState = false;
+var mouseX = false;
+var mouseY = false;
+var count = 0;
+var originalPos = (0, 0);
+var tempShape = false;
+var tempObj = [];
 
 
 
 
 
 
+/*
+    *************************************************************
+    *************************************************************
+    *************************************************************
 
+                    Drawing Shapes Centralised
 
-
+    *************************************************************
+    *************************************************************
+    *************************************************************
+*/
 function getMousePos(canvas, evt) {
     let rect = canvas.getBoundingClientRect();
-    console.log(evt);
     return {
       x: evt.clientX - rect.left,
       y: evt.clientY - rect.top
     };
 }
 
+function onMouseMove (evt) {
+    mouseX = getMousePos(c, evt).x;
+    mouseY = getMousePos(c, evt).y;
+}
+
+function onMouseDown (event) {
+    console.log('mouse down');
+    // debugger;
+    mouseDownState = true;
+    originalPos = getMousePos(c, event);
+    document.getElementsByTagName('body')[0].addEventListener('mouseup', onMouseUp, false);
+}
+
+function onMouseUp () {
+    mouseDownState = false;
+
+    if (mouseX) {
+        objArr.push(tempObj[0]);
+        tempObj.pop();
+    } else {
+        tempObj.pop();
+    }
+
+    count = 0;
+    originalPos = false;
+    c.removeEventListener('mousedown', onMouseDown, false);
+    document.getElementsByTagName('body')[0].removeEventListener('mouseup', onMouseUp, false);
+    sideBarSetup();
+}
+
+c.addEventListener('mouseenter', function () {
+    // debugger;
+    c.addEventListener('mousemove', onMouseMove, false);
+})
+
+c.addEventListener('mouseleave', function () {
+    // debugger;
+    mouseX = false;
+    mouseY = false;
+    mouseDownState = false;
+    c.removeEventListener('mousedown', onMouseDown, false);
+    c.removeEventListener('mousemove', onMouseMove, false);
+});
+
+function everRecurringLoop() {
+    ctx.clearRect(0, 0, c.width, c.height);
+    redrawShapes();
+    //drawing tempShapes
+    // if(onMouseDown && mouseX) {}; --> drawing squiggly lines 
+    if (mouseDownState && mouseX) {
+        console.log(tempShape);
+        switch (tempShape) {
+            case 'rect':
+            ctx.beginPath();
+                if (count === 0) {
+                    let rect = {};
+                    rect.type =  'rect';
+                    rect.specs = [originalPos.x, originalPos.y, mouseY-originalPos.y, mouseX-originalPos.x];
+                    rect.draw = 'stroke';
+                    rect.strokeStyle = 'black';
+            
+                    tempObj.push(rect);
+                    count++;
+                } else {
+                    count++;
+                    tempObj[0].specs = [originalPos.x, originalPos.y, mouseY-originalPos.y, mouseX-originalPos.x]
+                    ctx.rect(originalPos.x, originalPos.y, mouseY-originalPos.y, mouseX-originalPos.x);
+                    ctx.stroke();
+                }
+                break;
+
+            case 'circle':
+                ctx.beginPath();
+                if (count === 0) {
+                    let circle = {};
+                    circle.type = 'circle';
+                    circle.specs = [originalPos.x, originalPos.y, 100, 0, 3];
+                    circle.draw = 'stroke';
+                    circle.strokeStyle = 'black';
+                    count++;
+                    tempObj.push(circle);
+                } else {
+                    count++;
+                    tempObj[0].specs = [mouseX, mouseY, 100, 0, 3];
+                    ctx.arc(mouseX, mouseY, 100, 0, 3 * Math.PI);
+                    ctx.stroke();
+                } 
+                break;
+
+            case 'text':
+                ctx.beginPath();
+                if (count === 0) {
+                    let text = {};
+                    text.type = 'text';
+                    text.specs = ['Hello World', originalPos.x, originalPos.y];
+                    text.draw = 'fill';
+                    text.font = '20px Arial';
+                    text.strokeStyle = 'black';
+                
+                    tempObj.push(text);
+                    count++;
+                } else {
+                    count++;
+                    console.log('mouseX: ' + mouseX);
+                    console.log('mouseY: ' + mouseY);
+                    tempObj[0].specs = ['Hello World', mouseX, mouseY];
+                    ctx.fillText(tempObj[0].specs[0], tempObj[0].specs[1], tempObj[0].specs[2]);
+                }
+                break;
+            
+            case 'line':
+                ctx.beginPath();
+                if (count === 0) {
+                    let line = {};
+                    line.type = 'line';
+                    line.start = [originalPos.x, originalPos.y];
+                    line.end = [mouseX, mouseY];
+                    line.strokeStyle = 'black';
+                    
+                    tempObj.push(line);
+                    count++;
+                } else {
+                    count++;
+                    tempObj[0].end = [mouseX, mouseY];
+                    ctx.moveTo(originalPos.x, originalPos.y);
+                    ctx.lineTo(mouseX, mouseY);
+                    ctx.stroke();
+                }
+                break;
+
+            case 'img':
+                break;
+
+            default:
+                break;
+        }
+    }
+    window.requestAnimationFrame(everRecurringLoop);
+}
+
+window.requestAnimationFrame(everRecurringLoop);
+
+
 /*
-    *************************************************************
-    *************************************************************
     *************************************************************
 
                     Create Rectangles
 
     *************************************************************
-    *************************************************************
-    *************************************************************
 */
-var count;  
-var originalPos;
-function drawWhenMoveRect (rectButEvt) {
-    ctx.clearRect(0, 0, c.width, c.height);
-    let mousePos = getMousePos(c, rectButEvt);
-    
-    if (count === 0) {
-        let rect = {};
-        rect.type =  'rect';
-        rect.specs = [originalPos.x, originalPos.y, mousePos.y-originalPos.y, mousePos.x-originalPos.x];
-        rect.draw = 'stroke';
-        rect.strokeStyle = 'black';
-
-        objArr.push(rect);
-    } else {
-        objArr[objArr.length-1].specs = [originalPos.x, originalPos.y, mousePos.y-originalPos.y, mousePos.x-originalPos.x]
-    }
-    
-    redrawShapes();
-    count ++;
-}
-
-function drag2drawThingsRect (rectButEvt) {
-    // window.requestAnimationFrame(drag2drawThings(thing, evt));
-    console.log('mousedown');
-    c.addEventListener('mouseup', newThingRect, false);
-
-    originalPos = getMousePos(c, rectButEvt);
-    count = 0;
-    c.addEventListener('mousemove', drawWhenMoveRect, false);
-}
-
-function newThingRect() {
-    c.removeEventListener('mousedown', drag2drawThingsRect, false);
-    ctx.clearRect(0, 0, c.width, c.height);
-    redrawShapes();
-    sideBarSetup();
-    c.removeEventListener('mousemove', drawWhenMoveRect, false);
-    c.removeEventListener('mouseup', newThingRect, false);
-    count = 0;
-} 
 
 function drawRectangle () {
-    c.addEventListener('mousedown', drag2drawThingsRect, false);
+    tempShape = 'rect';
+    c.addEventListener('mousedown', onMouseDown, false);
+    // c.addEventListener('mousedown', drag2drawThingsRect, false);
 }
-
-
 
 
 /*
-    *************************************************************
-    *************************************************************
     *************************************************************
 
                     Create Circles
 
     *************************************************************
-    *************************************************************
-    *************************************************************
 */
 
 function drawCircle () {
-    ctx.beginPath();
-    ctx.arc(100, 100, 100, 0, 3 * Math.PI);
-    ctx.stroke();
+    // ctx.beginPath();
+    // ctx.arc(100, 100, 100, 0, 3 * Math.PI);
+    // ctx.stroke();
 
-    let circle = {};
-    circle.type = 'circle';
-    circle.specs = [100, 100, 100, 0, 3];
-    circle.draw = 'stroke';
-    circle.strokeStyle = 'black';
+    // let circle = {};
+    // circle.type = 'circle';
+    // circle.specs = [100, 100, 100, 0, 3];
+    // circle.draw = 'stroke';
+    // circle.strokeStyle = 'black';
 
-    objArr.push(circle);
-    sideBarSetup();
+    // objArr.push(circle);
+    // sideBarSetup();
+    tempShape = 'circle';
+    c.addEventListener('mousedown', onMouseDown, false);
 }
 
 
-
-
-
-
 /*
-    *************************************************************
-    *************************************************************
     *************************************************************
 
                     Create Text
 
     *************************************************************
-    *************************************************************
-    *************************************************************
 */
-function drawThingsText (lineButEvt) {
-    originalPos = getMousePos(c, lineButEvt);
-
-    let text = {};
-    text.type = 'text';
-    text.specs = ['Hello World', originalPos.x, originalPos.y];
-    text.draw = 'fill';
-    text.font = '20px Arial';
-    text.strokeStyle = 'black';
-
-    objArr.push(text);
-
-    ctx.clearRect(0, 0, c.width, c.height);
-    redrawShapes();
-    sideBarSetup();
-    c.removeEventListener('click', drawThingsText, false);
-}
 
 function writeText () {
-    c.addEventListener('click', drawThingsText, false);
+    tempShape = 'text';
+    c.addEventListener('mousedown', onMouseDown, false);
 }
-
-
 
 
 /*
-    *************************************************************
-    *************************************************************
     *************************************************************
 
                     Create Line
 
     *************************************************************
-    *************************************************************
-    *************************************************************
 */
-function drawWhenMoveLine (lineButEvt) {
-    ctx.clearRect(0, 0, c.width, c.height);
-    let mousePos = getMousePos(c, lineButEvt);
-    
-    if (count === 0) {
-        let line = {};
-        line.type = 'line';
-        line.start = [originalPos.x, originalPos.y];
-        line.end = [mousePos.x, mousePos.y];
-        line.strokeStyle = 'black';
-
-        objArr.push(line);
-    } else {
-        objArr[objArr.length-1].end = [mousePos.x, mousePos.y];
-    }
-    
-    redrawShapes();
-    count ++;
-}
-
-function drag2drawThingsLine (lineButEvt) {
-    // window.requestAnimationFrame(drag2drawThings(thing, evt));
-    console.log('mousedown');
-    c.addEventListener('mouseup', newThingLine, false);
-
-    originalPos = getMousePos(c, lineButEvt);
-    count = 0;
-    c.addEventListener('mousemove', drawWhenMoveLine, false);
-}
-
-function newThingLine () {
-    c.removeEventListener('mousedown', drag2drawThingsLine, false);
-    ctx.clearRect(0, 0, c.width, c.height);
-    redrawShapes();
-    sideBarSetup();
-    c.removeEventListener('mousemove', drawWhenMoveLine, false);
-    c.removeEventListener('mouseup', newThingLine, false);
-    count = 0;
-} 
 
 function drawLine () {
-    console.log('line')
-    c.addEventListener('mousedown', drag2drawThingsLine, false);
+    tempShape = 'line';
+    c.addEventListener('mousedown', onMouseDown, false);
 }
 
 
@@ -263,6 +304,7 @@ function save () {
 */
 
 function checkAndDraw (obj) {
+    ctx.beginPath();
     let fromLeft;
     let fromTop;
     let size;
@@ -279,7 +321,6 @@ function checkAndDraw (obj) {
             size = obj.specs[2];
             draw = obj.draw;
 
-            ctx.beginPath();
             ctx.arc(fromLeft, fromTop, size, 0, 2 * Math.PI);
             break;
         case 'rect': 
@@ -292,7 +333,6 @@ function checkAndDraw (obj) {
             ctx.rect(fromLeft, fromTop, length, height);
             break;
         case 'text': 
-            console.log('whee')
             text = obj.specs[0];
             fromLeft = obj.specs[1];
             fromTop = obj.specs[2];
@@ -308,6 +348,8 @@ function checkAndDraw (obj) {
             }
             break;
         case 'line': 
+            console.log("GHELLLR");
+            console.log(obj)
             start = obj.start;
             end = obj.end;
 
@@ -320,7 +362,6 @@ function checkAndDraw (obj) {
     if (draw == 'stroke' && obj.type !== 'text') {
         let strokeStyle = obj.strokeStyle;
         ctx.strokeStyle = strokeStyle;
-        console.log(obj.type, obj.strokeStyle)
         ctx.stroke();
     } else if (obj.type !== 'text' && obj.type !== 'line'){
         let fillStyle = obj.fillStyle;
@@ -336,9 +377,6 @@ function getObjFromDb () {
         console.log("response text", this.responseText);
         console.log("status text", this.statusText);
         console.log("status code", this.status);
-        
-        const response = JSON.parse(this.responseText)[0];
-        if (response.details) {objArr = response.details.drawings;}
 
         redrawShapes();
         sideBarSetup();
@@ -354,7 +392,7 @@ function getObjFromDb () {
     request.send();
 }
 
-function redrawShapes () {
+function redrawShapes() {
     for(let i=0; i  < objArr.length; i++) {
         checkAndDraw(objArr[i]);
     }
@@ -375,10 +413,8 @@ function redrawShapes () {
 */
 function sideBarSetup () {
     let itemsToRemove = document.getElementsByClassName('items');
-    console.log(itemsToRemove);
     let num = itemsToRemove.length;
     for(let i=num-1; i >= 0; i--) {
-        console.log(i)
         itemsToRemove[i].parentNode.removeChild(itemsToRemove[i]);
     }
 
@@ -387,8 +423,8 @@ function sideBarSetup () {
         item.id = i;
         item.classList.add('items');
         item.innerText = objArr[i].type;
-        // item.addEventListener('mouseover', makeRed, false);
-        // item.addEventListener('mouseout', makeBlack, false);
+        item.addEventListener('click', makeRed, false);
+        // item.addEventListener('mouseleave', makeBlack, false);
         item.addEventListener('click', propertiesSetup, false);
         document.getElementById('objList').appendChild(item);        
     }
@@ -396,7 +432,6 @@ function sideBarSetup () {
 
 
 function propertiesSetup (event) {
-    console.log('yay');
     let id = event.target.id;
     let object = objArr[id];
     console.log(id);
@@ -408,20 +443,23 @@ function propertiesSetup (event) {
         object.fillStyle = 'red';
     }
 
-    redrawShapes();
+    console.log('objArr');
+    // debugger;
 }
 
 function makeRed (event) {
     let id = event.target.id;
     let object = objArr[id];
+    console.log('id: ' + id);
+    console.log(object);
 
     if (object.draw == 'stroke') {
+        //debugger;
         object.strokeStyle = 'red';
     } else {
         object.fillStyle = 'red';
     }
-
-    redrawShapes();
+    console.log(objArr);
 }
 
 function makeBlack (event) {
@@ -433,8 +471,6 @@ function makeBlack (event) {
     } else {
         object.fillStyle = 'black';
     }
-
-    redrawShapes();
 }
 
 
@@ -456,6 +492,10 @@ document.getElementById('cir').addEventListener('click', drawCircle);
 document.getElementById('text').addEventListener('click', writeText);
 document.getElementById('line').addEventListener('click', drawLine);
 document.getElementById('save').addEventListener('click', save);
+
+
+
+
 
 
 window.onload = getObjFromDb;

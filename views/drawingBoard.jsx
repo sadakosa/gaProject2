@@ -18,8 +18,9 @@ class drawingBoard extends React.Component {
                 </div>
 
                 <div className='row'>
-                    <div id='objList'>
+                    <div id='objects'>
                         <h1><u>List of Objects</u></h1>
+                        <div id='objList'></div>
                     </div>
 
                     <div>
@@ -27,7 +28,8 @@ class drawingBoard extends React.Component {
                     </div>
 
                     <div id='properties'>
-                    <h1><u>Properties Bar</u></h1>
+                        <h1><u>Properties Bar</u></h1>
+                        <div id='proList'></div>
                     </div>
                 </div>
                 
