@@ -75,14 +75,14 @@ function makeRectPros (object, id) {
     stroke.setAttribute('value', 'stroke');
     fill.setAttribute('value', 'fill');
 
-    if (object.draw == 'stroke') {
-        strokeOrFill.value = stroke;
-    } else {
-        strokeOrFill.value = fill;
-    }
-
     strokeOrFill.appendChild(stroke);
     strokeOrFill.appendChild(fill);
+
+    if (object.draw == 'stroke') {
+        strokeOrFill.selectedIndex = 0;
+    } else {
+        strokeOrFill.selectedIndex = 1;
+    }
     
     div.appendChild(strokeOrFillName);
     div.appendChild(document.createElement('br'));
@@ -120,16 +120,16 @@ function makeRectPros (object, id) {
 
     switch (tempStyleClick) {
         case 'red':
-            style.value = red;
+            style.selectedIndex = 0;
             break;
         case 'black':
-            style.value = black;
-            break;
-        case 'green':
-            style.value = green;
+            style.selectedIndex = 1;
             break;
         case 'blue':
-            style.value = blue;
+            style.selectedIndex = 2;
+            break;
+        case 'green':
+            style.selectedIndex = 3;
             break;
     }
 
@@ -234,14 +234,14 @@ function makeCirclePros (object, id) {
     stroke.setAttribute('value', 'stroke');
     fill.setAttribute('value', 'fill');
 
-    if (object.draw == 'stroke') {
-        strokeOrFill.value = stroke;
-    } else {
-        strokeOrFill.value = fill;
-    }
-
     strokeOrFill.appendChild(stroke);
     strokeOrFill.appendChild(fill);
+
+    if (object.draw == 'stroke') {
+        strokeOrFill.selectedIndex = 0;
+    } else {
+        strokeOrFill.selectedIndex = 1;
+    }
     
     div.appendChild(strokeOrFillName);
     div.appendChild(document.createElement('br'));
@@ -279,16 +279,16 @@ function makeCirclePros (object, id) {
 
     switch (tempStyleClick) {
         case 'red':
-            style.value = red;
+            style.selectedIndex = 0;
             break;
         case 'black':
-            style.value = black;
-            break;
-        case 'green':
-            style.value = green;
+            style.selectedIndex = 1;
             break;
         case 'blue':
-            style.value = blue;
+            style.selectedIndex = 2;
+            break;
+        case 'green':
+            style.selectedIndex = 3;
             break;
     }
 
@@ -440,6 +440,41 @@ function makeTextPros (object, id) {
     fontsize.appendChild(fontsize60);
     fontsize.appendChild(fontsize72);
 
+    let originalFontsize = object.font.split('')[0] + object.font.split('')[1];
+    
+    switch (originalFontsize) {
+        case '12':
+            fontsize.selectedIndex = 0;
+            break;
+        case '14':
+            fontsize.selectedIndex = 1;
+        break;
+        case '16':
+            fontsize.selectedIndex = 2;
+            break;
+        case '18':
+            fontsize.selectedIndex = 3;
+            break;
+        case '20':
+            fontsize.selectedIndex = 4;
+            break;
+        case '24':
+            fontsize.selectedIndex = 5;
+            break;
+        case '36':
+            fontsize.selectedIndex = 6;
+            break;
+        case '48':
+            fontsize.selectedIndex = 7;
+            break;
+        case '60':
+            fontsize.selectedIndex = 8;
+            break;
+        case '72':
+            fontsize.selectedIndex = 9;
+            break;
+    }
+
     div.appendChild(fontsizeName);
     div.appendChild(document.createElement('br'));
     div.appendChild(fontsize);
@@ -470,15 +505,16 @@ function makeTextPros (object, id) {
     font.appendChild(fontSans);
 
     let tempValue = object.font;
-    switch (tempValue.split('').splice(0,5).join('')) {
+    
+    switch (tempValue.split(' ').splice(1,1)) {
         case 'arial':
-            font.value = fontArial;
+            font.selectedIndex = 0;
             break;
         case 'calibri':
-            font.value = fontCalibri;
+            font.selectedIndex = 1;
             break;
         case 'sans-serif':
-            font.value = fontSans;
+            font.selectedIndex = 2;
             break;
     }
 
@@ -503,14 +539,14 @@ function makeTextPros (object, id) {
     stroke.setAttribute('value', 'stroke');
     fill.setAttribute('value', 'fill');
 
-    if (object.draw == 'stroke') {
-        strokeOrFill.value = stroke;
-    } else {
-        strokeOrFill.value = fill;
-    }
-
     strokeOrFill.appendChild(stroke);
     strokeOrFill.appendChild(fill);
+
+    if (object.draw == 'stroke') {
+        strokeOrFill.selectedIndex = 0;
+    } else {
+        strokeOrFill.selectedIndex = 1;
+    }
     
     div.appendChild(strokeOrFillName);
     div.appendChild(document.createElement('br'));
@@ -548,16 +584,16 @@ function makeTextPros (object, id) {
 
     switch (tempStyleClick) {
         case 'red':
-            style.value = red;
+            style.selectedIndex = 0;
             break;
         case 'black':
-            style.value = black;
-            break;
-        case 'green':
-            style.value = green;
+            style.selectedIndex = 1;
             break;
         case 'blue':
-            style.value = blue;
+            style.selectedIndex = 2;
+            break;
+        case 'green':
+            style.selectedIndex = 3;
             break;
     }
 
@@ -672,14 +708,14 @@ function makeLinePros (object,  id) {
     stroke.setAttribute('value', 'stroke');
     fill.setAttribute('value', 'fill');
 
-    if (object.draw == 'stroke') {
-        strokeOrFill.value = stroke;
-    } else {
-        strokeOrFill.value = fill;
-    }
-
     strokeOrFill.appendChild(stroke);
     strokeOrFill.appendChild(fill);
+
+    if (object.draw == 'stroke') {
+        strokeOrFill.selectedIndex = 0;
+    } else {
+        strokeOrFill.selectedIndex = 1;
+    }
     
     div.appendChild(strokeOrFillName);
     div.appendChild(document.createElement('br'));
@@ -717,16 +753,16 @@ function makeLinePros (object,  id) {
 
     switch (tempStyleClick) {
         case 'red':
-            style.value = red;
+            style.selectedIndex = 0;
             break;
         case 'black':
-            style.value = black;
-            break;
-        case 'green':
-            style.value = green;
+            style.selectedIndex = 1;
             break;
         case 'blue':
-            style.value = blue;
+            style.selectedIndex = 2;
+            break;
+        case 'green':
+            style.selectedIndex = 3;
             break;
     }
 
@@ -797,6 +833,7 @@ function changeRectPros (id) {
     //adding event listener
     let sidebarItem = document.getElementById(id);
     sidebarItem.addEventListener('mouseleave', makeBlack, false);
+    document.removeEventListener('keydown', moveRects, false);
     clearProperties();
 }
 
@@ -820,6 +857,7 @@ function changeCirclePros (id) {
     //adding event listener
     let sidebarItem = document.getElementById(id);
     sidebarItem.addEventListener('mouseleave', makeBlack, false);
+    document.removeEventListener('keydown', moveCircles, false);
     clearProperties();
 }
 
@@ -849,6 +887,7 @@ function changeTextPros (id) {
     //adding event listener
     let sidebarItem = document.getElementById(id);
     sidebarItem.addEventListener('mouseleave', makeBlack, false);
+    document.removeEventListener('keydown', moveText, false);
     clearProperties();
 }
 
@@ -873,6 +912,7 @@ function changeLinePros (id) {
     //adding event listener
     let sidebarItem = document.getElementById(id);
     sidebarItem.addEventListener('mouseleave', makeBlack, false);
+    document.removeEventListener('keydown', moveLine, false);
     clearProperties();
 }
 
@@ -894,7 +934,171 @@ function deleteObject (id) {
     clearProperties();
 }
 
+/*
+    *************************************************************
+    *************************************************************
+    *************************************************************
 
+                            Move Objects
+
+    *************************************************************
+    *************************************************************
+    *************************************************************
+*/
+
+function moveRects (event) {
+    switch (event.code) {
+        case 'ArrowUp': //up arrow
+            startingX = objArr[tempId].specs[0];
+            startingY = parseInt(objArr[tempId].specs[1])-1;
+            length = objArr[tempId].specs[2];
+            height = objArr[tempId].specs[3];
+            objArr[tempId].specs = [startingX, startingY.toString(), length, height];
+            break;
+        case 'ArrowDown': //down arrow
+            startingX = objArr[tempId].specs[0];
+            startingY = parseInt(objArr[tempId].specs[1])+1;
+            length = objArr[tempId].specs[2];
+            height = objArr[tempId].specs[3];
+            objArr[tempId].specs = [startingX, startingY.toString(), length, height];
+            break;
+        case 'ArrowLeft': //left arrow
+            startingX = parseInt(objArr[tempId].specs[0])-1;
+            startingY = objArr[tempId].specs[1];
+            length = objArr[tempId].specs[2];
+            height = objArr[tempId].specs[3];
+            objArr[tempId].specs = [startingX.toString(), startingY, length, height];
+            break;
+        case 'ArrowRight': //right arrow
+            startingX = parseInt(objArr[tempId].specs[0])+1;
+            startingY = objArr[tempId].specs[1];
+            length = objArr[tempId].specs[2];
+            height = objArr[tempId].specs[3];
+            objArr[tempId].specs = [startingX.toString(), startingY, length, height];
+            break;
+    }
+
+    document.getElementById('startingX').value = objArr[tempId].specs[0];
+    document.getElementById('startingY').value = objArr[tempId].specs[1];
+}
+
+
+
+
+
+
+
+
+function moveCircles (event) {
+    switch (event.code) {
+        case 'ArrowUp': //up arrow
+            startingX = objArr[tempId].specs[0];
+            startingY = parseInt(objArr[tempId].specs[1])-1;
+            diameter = objArr[tempId].specs[2];
+            objArr[tempId].specs = [startingX, startingY.toString(), diameter, 0, 3];
+            break;
+        case 'ArrowDown': //down arrow
+            startingX = objArr[tempId].specs[0];
+            startingY = parseInt(objArr[tempId].specs[1])+1;
+            diameter = objArr[tempId].specs[2];
+            objArr[tempId].specs = [startingX, startingY.toString(), diameter, 0, 3];
+            break;
+        case 'ArrowLeft': //left arrow
+            startingX = parseInt(objArr[tempId].specs[0])-1;
+            startingY = objArr[tempId].specs[1];
+            diameter = objArr[tempId].specs[2];
+            objArr[tempId].specs = [startingX, startingY.toString(), diameter, 0, 3];
+            break;
+        case 'ArrowRight': //right arrow
+            startingX = parseInt(objArr[tempId].specs[0])+1;
+            startingY = objArr[tempId].specs[1];
+            diameter = objArr[tempId].specs[2];
+            objArr[tempId].specs = [startingX, startingY.toString(), diameter, 0, 3];
+            break;
+    }
+
+    document.getElementById('startingX').value = objArr[tempId].specs[0];
+    document.getElementById('startingY').value = objArr[tempId].specs[1];
+}
+
+
+
+
+
+function moveText (event) {
+    switch (event.code) {
+        case 'ArrowUp': //up arrow
+            text = objArr[tempId].specs[0];
+            startingX = objArr[tempId].specs[1];
+            startingY = parseInt(objArr[tempId].specs[2])-1;
+            objArr[tempId].specs = [text, startingX, startingY.toString()];
+            break;
+        case 'ArrowDown': //down arrow
+            text = objArr[tempId].specs[0];
+            startingX = objArr[tempId].specs[1];
+            startingY = parseInt(objArr[tempId].specs[2])+1;
+            objArr[tempId].specs = [text, startingX, startingY.toString()];
+            break;
+        case 'ArrowLeft': //left arrow
+            text = objArr[tempId].specs[0];
+            startingX = parseInt(objArr[tempId].specs[1])-1;
+            startingY = objArr[tempId].specs[2];
+            objArr[tempId].specs = [text, startingX.toString(), startingY];
+            break;
+        case 'ArrowRight': //right arrow
+            text = objArr[tempId].specs[0];
+            startingX = parseInt(objArr[tempId].specs[1])+1;
+            startingY = objArr[tempId].specs[2];
+            objArr[tempId].specs = [text, startingX.toString(), startingY];
+            break;
+    }
+
+    document.getElementById('startingX').value = objArr[tempId].specs[1];
+    document.getElementById('startingY').value = objArr[tempId].specs[2];
+}
+
+
+function moveLine (event) {
+    switch (event.code) {
+        case 'ArrowUp': //up arrow
+            startingX = objArr[tempId].start[0];
+            startingY = parseInt(objArr[tempId].start[1])-1;
+            endingX = objArr[tempId].end[0];
+            endingY = parseInt(objArr[tempId].end[1])-1;
+            objArr[tempId].start = [startingX, startingY.toString()];
+            objArr[tempId].end = [endingX, endingY.toString()];
+            break;
+        case 'ArrowDown': //down arrow
+            startingX = objArr[tempId].start[0];
+            startingY = parseInt(objArr[tempId].start[1])+1;
+            endingX = objArr[tempId].end[0];
+            endingY = parseInt(objArr[tempId].end[1])+1;
+            objArr[tempId].start = [startingX, startingY.toString()];
+            objArr[tempId].end = [endingX, endingY.toString()];
+            break;
+        case 'ArrowLeft': //left arrow
+            startingX = parseInt(objArr[tempId].start[0])-1;
+            startingY = objArr[tempId].start[1];
+            endingX = parseInt(objArr[tempId].end[0])-1;
+            endingY = objArr[tempId].end[1];
+            objArr[tempId].start = [startingX.toString(), startingY];
+            objArr[tempId].end = [endingX.toString(), endingY];
+            break;
+        case 'ArrowRight': //right arrow
+            startingX = parseInt(objArr[tempId].start[0])+1;
+            startingY = objArr[tempId].start[1];
+            endingX = parseInt(objArr[tempId].end[0])+1;
+            endingY = objArr[tempId].end[1];
+            objArr[tempId].start = [startingX.toString(), startingY];
+            objArr[tempId].end = [endingX.toString(), endingY];
+            break;
+    }
+
+    document.getElementById('startingX').value = objArr[tempId].start[0];
+    document.getElementById('startingY').value = objArr[tempId].start[1];
+    document.getElementById('endingX').value = objArr[tempId].end[0];
+    document.getElementById('endingY').value = objArr[tempId].end[1];
+}
 /*
     *************************************************************
     *************************************************************
@@ -907,12 +1111,9 @@ function deleteObject (id) {
     *************************************************************
 */
 var tempStyleClick;
+var tempId;
 function propertiesSetup (event) {
-    if (objArr[event.target.id].draw === 'fill') {
-        tempStyleClick = objArr[event.target.id].fillStyle;
-    } else {
-        tempStyleClick = objArr[event.target.id].strokeStyle;
-    }
+    tempStyleClick = tempStyleHover;
     
     makeRed(event);
     event.target.removeEventListener('mouseleave', makeBlack, false);
@@ -926,18 +1127,23 @@ function propertiesSetup (event) {
     shape.innerText = object.type;
     form.appendChild(shape);
 
+    tempId = event.target.id;
     switch (object.type) {
         case 'rect':
             form.appendChild(makeRectPros(object, event.target.id));
+            document.addEventListener('keydown', moveRects, false);
             break;
         case 'circle':
             form.appendChild(makeCirclePros(object, event.target.id));
+            document.addEventListener('keydown', moveCircles, false);
             break;
         case 'text':
             form.appendChild(makeTextPros(object, event.target.id));
+            document.addEventListener('keydown', moveText, false);
             break;
         case 'line':
             form.appendChild(makeLinePros(object, event.target.id));
+            document.addEventListener('keydown', moveLine, false);
             break;
     }
     proList.appendChild(form);

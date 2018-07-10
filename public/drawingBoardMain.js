@@ -127,7 +127,7 @@ function everRecurringLoop() {
                     text.type = 'text';
                     text.specs = ['Hello World', originalPos.x, originalPos.y];
                     text.draw = 'fill';
-                    text.font = '20px Arial';
+                    text.font = '20px arial';
                     text.strokeStyle = 'black';
                 
                     tempObj.push(text);
