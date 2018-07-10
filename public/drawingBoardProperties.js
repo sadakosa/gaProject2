@@ -311,9 +311,6 @@ function makeCirclePros (object, id) {
     });
 
 
-    div.appendChild(submitButton);
-
-
 
 
 
@@ -385,7 +382,7 @@ function makeTextPros (object, id) {
     
     textName.innerText = 'Text: ';
     text.setAttribute('type', 'text');
-    text.setAttribute('id', 'text');
+    text.setAttribute('id', 'textValue');
     text.setAttribute('value', object.specs[0]);
 
     div.appendChild(textName);
@@ -458,29 +455,29 @@ function makeTextPros (object, id) {
 
     font.setAttribute('id', 'font');
     let fontArial = document.createElement('option');
-    let fontTNR = document.createElement('option');
+    let fontCalibri = document.createElement('option');
     let fontSans = document.createElement('option');
 
     fontArial.innerText = 'Arial';
-    fontArial.setAttribute('value', 'Arial');
-    fontTNR.innerText = 'Times New Roman';
-    fontTNR.setAttribute('value', 'Times New Roman');
+    fontArial.setAttribute('value', 'arial');
+    fontCalibri.innerText = 'Calibri';
+    fontCalibri.setAttribute('value', 'calibri');
     fontSans.innerText = 'Sans Serif';
-    fontSans.setAttribute('value', 'Sans Serif');
+    fontSans.setAttribute('value', 'sans-serif');
 
     font.appendChild(fontArial);
-    font.appendChild(fontTNR);
+    font.appendChild(fontCalibri);
     font.appendChild(fontSans);
 
     let tempValue = object.font;
     switch (tempValue.split('').splice(0,5).join('')) {
-        case 'Arial':
+        case 'arial':
             font.value = fontArial;
             break;
-        case 'Times New Roman':
-            font.value = fontTNR;
+        case 'calibri':
+            font.value = fontCalibri;
             break;
-        case 'Sans Serif':
+        case 'sans-serif':
             font.value = fontSans;
             break;
     }
@@ -610,8 +607,162 @@ function makeTextPros (object, id) {
     *************************************************************
 */
 function makeLinePros (object,  id) {
+    let div = document.createElement('div');
+    
+    //POSITIONS AND DIMENSOPMS
+    let startingXName = document.createElement('strong');
+    let startingYName = document.createElement('strong');
+    let endingXName = document.createElement('strong');
+    let endingYName = document.createElement('strong');
+    let startingX = document.createElement('input');
+    let startingY = document.createElement('input');
+    let endingX = document.createElement('input');
+    let endingY = document.createElement('input');
+
+    startingXName.innerText = 'Starting X: ';
+    startingX.setAttribute('type', 'text');
+    startingX.setAttribute('id', 'startingX');
+    startingX.setAttribute('value', object.start[0]);
+
+    startingYName.innerText = 'Starting Y: ';
+    startingY.setAttribute('type', 'text');
+    startingY.setAttribute('id', 'startingY');
+    startingY.setAttribute('value', object.start[1]);
+
+    endingXName.innerText = 'Ending X: ';
+    endingX.setAttribute('type', 'text');
+    endingX.setAttribute('id', 'endingX');
+    endingX.setAttribute('value', object.end[0]);
+
+    endingYName.innerText = 'Ending Y: ';
+    endingY.setAttribute('type', 'text');
+    endingY.setAttribute('id', 'endingY');
+    endingY.setAttribute('value', object.end[1]);
+
+    //adding stuff to form
+    div.appendChild(startingXName);
+    div.appendChild(document.createElement('br'));
+    div.appendChild(startingX);
+    div.appendChild(document.createElement('br'));
+    div.appendChild(startingYName);
+    div.appendChild(document.createElement('br'));
+    div.appendChild(startingY);
+    div.appendChild(document.createElement('br'));
+    div.appendChild(endingXName);
+    div.appendChild(document.createElement('br'));
+    div.appendChild(endingX);
+    div.appendChild(document.createElement('br'));
+    div.appendChild(endingYName);
+    div.appendChild(document.createElement('br'));
+    div.appendChild(endingY);
+    div.appendChild(document.createElement('br'));
 
 
+
+    //STROKE OR FILL
+    let strokeOrFillName = document.createElement('strong');
+    let strokeOrFill = document.createElement('select');
+    let stroke = document.createElement('option');
+    let fill = document.createElement('option');
+
+    strokeOrFillName.innerText = 'Stroke or Fill?';
+    stroke.innerText = 'stroke';
+    fill.innerText = 'fill';
+    strokeOrFill.setAttribute('id', 'strokeOrFill');
+    stroke.setAttribute('value', 'stroke');
+    fill.setAttribute('value', 'fill');
+
+    if (object.draw == 'stroke') {
+        strokeOrFill.value = stroke;
+    } else {
+        strokeOrFill.value = fill;
+    }
+
+    strokeOrFill.appendChild(stroke);
+    strokeOrFill.appendChild(fill);
+    
+    div.appendChild(strokeOrFillName);
+    div.appendChild(document.createElement('br'));
+    div.appendChild(strokeOrFill);
+    div.appendChild(document.createElement('br'));
+
+
+
+
+
+
+    //STROKE OR FILL STYLE
+    let styleName = document.createElement('strong');
+    let style = document.createElement('select')
+    let red = document.createElement('option');
+    let black = document.createElement('option');
+    let blue = document.createElement('option');
+    let green = document.createElement('option');
+
+    styleName.innerText = 'Color: '
+    red.innerText = 'red';
+    black.innerText = 'black';
+    blue.innerText = 'blue';
+    green.innerText = 'green';
+    style.setAttribute('id', 'style');
+    red.setAttribute('value', 'red');
+    black.setAttribute('value', 'black');
+    blue.setAttribute('value', 'blue');
+    green.setAttribute('value', 'green');
+    
+    style.appendChild(red);
+    style.appendChild(black);
+    style.appendChild(blue);
+    style.appendChild(green);
+
+    switch (tempStyleClick) {
+        case 'red':
+            style.value = red;
+            break;
+        case 'black':
+            style.value = black;
+            break;
+        case 'green':
+            style.value = green;
+            break;
+        case 'blue':
+            style.value = blue;
+            break;
+    }
+
+    div.appendChild(styleName);
+    div.appendChild(document.createElement('br'));
+    div.appendChild(style);
+    div.appendChild(document.createElement('br'));
+    div.appendChild(document.createElement('br'));
+
+
+
+
+    //SUBMIT BUTTON
+    let submitButton = document.createElement('div');
+    submitButton.classList.add('btn');
+    submitButton.classList.add('btn-primary');
+    submitButton.innerText = 'Update!';
+    submitButton.addEventListener('click', () => {
+        changeLinePros(id);
+    });
+
+
+
+    //DELETE BUTTON
+    let deleteButton = document.createElement('div');
+    deleteButton.classList.add('btn');
+    deleteButton.classList.add('btn-danger');
+    deleteButton.innerText = 'Delete!';
+    deleteButton.addEventListener('click', () => {
+        deleteObject(id);
+    });
+
+
+    div.appendChild(submitButton);
+    div.appendChild(deleteButton)
+    return div;
 }
 
 /*
@@ -678,7 +829,7 @@ function changeTextPros (id) {
     //change object array properties
     let startingX = document.getElementById('startingX').value;
     let startingY = document.getElementById('startingY').value;
-    let text = document.getElementById('text').value;
+    let text = document.getElementById('textValue').value;
     let fontsize = document.getElementById('fontsize').value;
     let font = document.getElementById('font').value;
     let strokeOrFill = document.getElementById('strokeOrFill').value;
@@ -694,8 +845,6 @@ function changeTextPros (id) {
     } else {
         objArr[id].fillStyle = style;
     }
-    
-    debugger;
 
     //adding event listener
     let sidebarItem = document.getElementById(id);
@@ -703,7 +852,27 @@ function changeTextPros (id) {
     clearProperties();
 }
 
-function changeLinePros () {
+function changeLinePros (id) {
+    //change object array properties
+    let startingX = document.getElementById('startingX').value;
+    let startingY = document.getElementById('startingY').value;
+    let endingX = document.getElementById('endingX').value;
+    let endingY = document.getElementById('endingY').value;
+    let strokeOrFill = document.getElementById('strokeOrFill').value;
+    let style = document.getElementById('style').value;
+
+    objArr[id].start = [startingX, startingY];
+    objArr[id].end = [endingX, endingY];
+    objArr[id].draw = strokeOrFill;
+    if (strokeOrFill == 'stroke') {
+        objArr[id].strokeStyle = style;
+    } else {
+        objArr[id].fillStyle = style;
+    }
+
+    //adding event listener
+    let sidebarItem = document.getElementById(id);
+    sidebarItem.addEventListener('mouseleave', makeBlack, false);
     clearProperties();
 }
 
