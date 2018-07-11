@@ -15,6 +15,7 @@ function changedObject () {
 
 //receive events 
 socket.on('changedObj', function (data) {
+    sideBarSetup();
     objArr = data.drawings;
 })
 
