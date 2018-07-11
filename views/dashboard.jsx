@@ -5,7 +5,7 @@ class dashboard extends React.Component {
     render() {
         return (
             <LayoutContainer name={this.props.username} id={this.props.id}>
-                <div id='createProjectBar'>
+                <div id="createProjectBar">
                     <form method='post' action='/createProjects'>
                         <input type='text' name='projectName' placeholder='project name'></input>
                         <button type='submit' className='btn btn-primary'>Add a Project</button>

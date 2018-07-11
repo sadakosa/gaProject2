@@ -4,7 +4,7 @@ var LayoutContainer = require('./loggedInLayout.jsx');
 class drawingBoard extends React.Component {
     render () {
         return (
-            <LayoutContainer name={this.props.username}>
+            <LayoutContainer name={this.props.username} id={this.props.id}>
                 <div className='row'>
                     <div className='btnGroup' style={{margin: '0 auto'}}>
                         <button className='btn btn-light' id='rect' style={{margin: '5px', width: '150px'}}>Rectangle</button>
