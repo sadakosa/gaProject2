@@ -14,7 +14,10 @@ module.exports = (app, db, io) => {
 
     //dashboard
     app.get('/dashboard', users.userDashboard);
-    app.get('/getProjects', apps.getProjects);
+    app.get('/getOwnProjects', apps.getOwnProjects);
+    app.get('/getSharedProjects', apps.getSharedProjects);
+    app.post('/shareProject', apps.shareProject);
+    app.post('/createProjects', apps.createProjects);
 
     //drawingBoard
     app.get('/drawingBoard/:id', apps.drawingBoard);
