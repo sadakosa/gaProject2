@@ -53,6 +53,7 @@ function onMouseUp () {
     if (mouseX) {
         objArr.push(tempObj[0]);
         tempObj.pop();
+        changedObject();
     } else {
         tempObj.pop();
     }

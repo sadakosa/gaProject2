@@ -1,6 +1,6 @@
-module.exports = (app, db) => {
+module.exports = (app, db, io) => {
     const users = require('./controllers/users.js')(db);
-    const apps = require('./controllers/apps.js')(db);
+    const apps = require('./controllers/apps.js')(db, io);
 
     app.get('/', users.get);
     

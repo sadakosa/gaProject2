@@ -33,7 +33,11 @@ class drawingBoard extends React.Component {
                     </div>
                 </div>
                 
+                <script>
+                    var id = {this.props.id};
+                </script>
                 <script src='/drawingBoardProperties.js'></script>
+                <script src='/drawingBoardSocket.js'></script>
                 <script src='/drawingBoardMain.js'></script>
             </LayoutContainer>
         );

@@ -1,8 +1,31 @@
-module.exports = function (db) {
+module.exports = function (db, io) {
+    let socketRooms = {};
+
     const drawingBoard = (request, response) => {
-        response.cookie('drawingBoard', request.params.id);
-        response.render('drawingBoard', {username: request.cookies.username});
+        let id = request.params.id;
+        
+        //Socket Setup
+        socketRooms[id] = io.of('/drawingBoard/' + id);
+
+        socketRooms[id].on('connection', function (socket) {
+            console.log('made socket connection', socket.id);
+            socketRooms[id].emit('hi', 'Hello!');
+        });
+
+        socketRooms[id].on('changedObj', function (data) {
+            console.log('changed object');
+            io.socketRooms[id].emit('changedObj', data);
+        })
+
+        //cookies and rendering jsx template
+        response.cookie('drawingBoard', id);
+        response.render('drawingBoard', {username: request.cookies.username, id: id});
     }
+
+
+
+
+
 
     const getObjects = (request, response) => {
         let id = request.cookies.drawingBoard;

@@ -23,6 +23,8 @@ const jsonfile = require('jsonfile');
 
 const methodOverride = require('method-override');
 
+const socket = require('socket.io');
+
 // const pg = require('pg');
 
 const sha256 = require('js-sha256');
@@ -90,6 +92,17 @@ app.use(express.urlencoded({
 
 
 
+
+/**
+ * ===================================
+ * Listen to requests on port 3000
+ * ===================================
+ */
+const server = app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
+
+//socket setup
+var io = socket(server);
+
 /*
     *************************************************************
     *************************************************************
@@ -103,15 +116,70 @@ app.use(express.urlencoded({
     *************************************************************
 */
 
-require('./routes')(app, db);
+require('./routes')(app, db, io);
 
 
 /**
  * ===================================
- * Listen to requests on port 3000
+ *     What the Fuck is going on? 
  * ===================================
  */
-const server = app.listen(3000, () => console.log('~~~ Tuning in to the waves of port 3000 ~~~'));
+
+// var url = require('url');
+//     ev = new events.EventEmitter()
+
+// // <ns name>: <ns regexp>
+// var routes = {
+//   // /user/:id
+//   'drawingBoard': '^\\/drawingBoard\\/(\\d+)$',
+
+//   // /:something/:id
+//   'default': '^\\/(\\\w+)\\/(\\d+)$'
+// };
+
+// // global entry point for new connections
+// io.on('connection', function (socket) {
+//   // extract namespace from connected url query param 'ns'
+//   var ns = url.parse(socket.handshake.url, true).query.ns;
+//   console.log('connected ns: '+ns)
+
+//   //
+//   for (var k in routes) {
+//     var routeName = k;
+//     var routeRegexp = new RegExp(routes[k]);
+
+//     // if connected ns matched with route regexp
+//     if (ns.match(routeRegexp)) {
+//       console.log('matched: '+routeName)
+
+//       // create new namespace (or use previously created)
+//       io.of(ns).on('connection', function (socket) {
+//         // fire event when socket connecting
+//         ev.emit('socket.connection route.'+routeName, socket);
+
+//         // @todo: add more if needed
+//         // on('message') -> ev.emit(...)
+//       });
+
+//       break;
+//     }
+//   }
+
+//   // when nothing matched
+//   // ...
+// });
+
+// // event when socket connected in 'user' namespace
+// ev.on('socket.connection route.user', function () {
+//   console.log('route[user] connecting..');
+// });
+
+// // event when socket connected in 'default' namespace
+// ev.on('socket.connection route.default', function () {
+//   console.log('route[default] connecting..');
+// });
+
+
 
 // Run clean up actions when server shuts down
 server.on('close', () => {

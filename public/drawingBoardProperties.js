@@ -149,6 +149,7 @@ function makeRectPros (object, id) {
     submitButton.innerText = 'Update!';
     submitButton.addEventListener('click', () => {
         changeRectPros(id);
+        changedObject();
     });
 
 
@@ -159,6 +160,7 @@ function makeRectPros (object, id) {
     deleteButton.innerText = 'Delete!';
     deleteButton.addEventListener('click', () => {
         deleteObject(id);
+        changedObject();
     });
 
 
@@ -308,6 +310,7 @@ function makeCirclePros (object, id) {
     submitButton.innerText = 'Update!';
     submitButton.addEventListener('click', () => {
         changeCirclePros(id);
+        changedObject();
     });
 
 
@@ -321,6 +324,7 @@ function makeCirclePros (object, id) {
     deleteButton.innerText = 'Delete!';
     deleteButton.addEventListener('click', () => {
         deleteObject(id);
+        changedObject();
     });
 
 
@@ -613,6 +617,7 @@ function makeTextPros (object, id) {
     submitButton.innerText = 'Update!';
     submitButton.addEventListener('click', () => {
         changeTextPros(id);
+        changedObject();
     });
 
 
@@ -623,6 +628,7 @@ function makeTextPros (object, id) {
     deleteButton.innerText = 'Delete!';
     deleteButton.addEventListener('click', () => {
         deleteObject(id);
+        changedObject();
     });
 
 
@@ -782,6 +788,7 @@ function makeLinePros (object,  id) {
     submitButton.innerText = 'Update!';
     submitButton.addEventListener('click', () => {
         changeLinePros(id);
+        changedObject();
     });
 
 
@@ -793,6 +800,7 @@ function makeLinePros (object,  id) {
     deleteButton.innerText = 'Delete!';
     deleteButton.addEventListener('click', () => {
         deleteObject(id);
+        changedObject();
     });
 
 
